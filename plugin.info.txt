@@ -1,0 +1,7 @@
+base   minimap
+author Nicolas GERARD
+email  gerardnico@gmail.com
+date   2015-10-25
+name   mini-map plugin
+desc   Create mini-map of a namespace (with the help of a bootstrap panel with a list group)
+url    http://www.dokuwiki.org/plugin:minimap
