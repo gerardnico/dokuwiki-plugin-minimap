@@ -2,9 +2,9 @@
 
 ## Usage
 
-The [Webocde Dokuwiki plugin](https://www.dokuwiki.org/plugin:webcode) generates a sitemap but only for the current namespace (ie mini-map)
+The [Minimap Dokuwiki plugin](https://www.dokuwiki.org/plugin:minimap) generates a sitemap but only for the current namespace (ie mini-map)
 
-By adding the <minimap/> tag in your page, you will generate a mini-map.
+By adding the <minimap> tag in your page, you will generate a mini-map.
 
 See the mini-map plugin page on Dokuwiki [here](https://www.dokuwiki.org/plugin:minimap)
 
