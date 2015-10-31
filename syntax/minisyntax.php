@@ -29,22 +29,20 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
             // As there is only one call to connect to in order to a add a pattern,
             // there is only one state entering the function
             // but I leave it for better understanding of the process flow
-            case DOKU_LEXER_ENTER :
+            case DOKU_LEXER_SPECIAL :
 
                 // Parse the parameters
                 $match = utf8_substr($match, 8, -1); //9 = strlen("<minimap")
                 $parameters['substr'] = 1;
 
                 // /i not case sensitive
-                $attributePattern = "\\s*(\w+)\\s*=\\s*\"?(\\d+)\"?\\s*";
+                $attributePattern = "\\s*(\w+)\\s*=\\s*[\'\"]?([\w\d\s-_\|\*\.]+)[\'\"]?\\s*";
                 $result = preg_match_all('/' . $attributePattern . '/i', $match, $matches);
                 if ($result != 0) {
                     foreach ($matches[1] as $key => $parameterKey) {
                         $parameters[strtolower($parameterKey)] = $matches[2][$key];
                     }
                 }
-
-                break;
 
         }
 
@@ -67,6 +65,14 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
         if ($mode == 'xhtml') {
 
             list($state, $pages, $parameters, $currentNameSpace) = $data;
+
+            global $ID;
+            global $INFO;
+            $callingId = $ID;
+            // If it's a sidebar, get the original id.
+            if ($INFO != null) {
+                $callingId = $INFO['id'];
+            }
 
             switch ($state) {
 
@@ -92,9 +98,13 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                             if($title) {
                                 $name = $title;
                             }
-                            global $ID;
+
+                            $substrPattern = '/' . $parameters['suppress'] . '/i';
+                            $replacement = '';
+                            $name = preg_replace($substrPattern, $replacement, $name);;
+
                             $active='';
-                            if ($ID==$page['id']) {
+                            if ($callingId==$page['id']) {
                                 $active='active';
                             }
 
