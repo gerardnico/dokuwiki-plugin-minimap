@@ -2,7 +2,7 @@
 
 ## Usage
 
-The [Minimap Dokuwiki plugin](https://www.dokuwiki.org/plugin:minimap) generates a sitemap but only for the current namespace (ie mini-map)
+The [Minimap Dokuwiki plugin](https://www.dokuwiki.org/plugin:minimap) generates a [sitemap](https://www.dokuwiki.org/index_sitemap?do=index) but only for the current [namespace](https://www.dokuwiki.org/namespaces) (ie mini-map)
 
 By adding the <minimap> tag in your page, you will generate a mini-map.
 
@@ -27,11 +27,33 @@ Install the plugin using:
 ## Syntax
 
 ```xml
-<minimap/>
+<minimap suppress="regular expression pattern">
+```
+
+where:
+
+  * the "suppress" option will suppress the "regular expression pattern" part of the page title. It uses the function [preg_replace](http://php.net/manual/en/function.preg-replace.php). Actually in the pattern, letters, digits and the following characters are allowed: space, -, _, |, *, .
+The use case is when you add to the title of your page already a namespace.
+
+## Example
+
+```xml
+<minimap suppress="Dokuwiki - ">
+```
+
+With the following page title:
+```
+Dokuwiki - Plugin Mini Map
+```
+the mini-map will show the following title:
+```
+Plugin Mini Map
 ```
 
 ## Configuration and Settings
-None
+
+
+  * A button is added in the toolbar, you can choose the shortcut key in the [configuration manager](https://www.dokuwiki.org/plugin:config).
 
 
 
