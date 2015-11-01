@@ -89,7 +89,9 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
 
                     // Build the list of page
                     $miniMapList = '<div class="list-group">';
+                    $pageNum = 0;
                     foreach ($pages as $page) {
+                        $pageNum++;
                         // page names
                         $name = noNSorNS($page['id']);
                         if(useHeading('navigation')) {
@@ -103,6 +105,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                             if ($parameters['debug']){
                                 $title .= ' ('.$page['id'].')';
                             }
+                            $title .= ' ('.$pageNum.')';
 
                             if ($parameters['suppress']) {
                                 $substrPattern = '/' . $parameters['suppress'] . '/i';
