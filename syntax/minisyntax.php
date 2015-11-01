@@ -97,11 +97,15 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                             $title = p_get_first_heading($page['id'], METADATA_RENDER_USING_SIMPLE_CACHE);
                             if($title) {
                                 $name = $title;
+                            } else {
+                                $title = $name;
                             }
 
-                            $substrPattern = '/' . $parameters['suppress'] . '/i';
-                            $replacement = '';
-                            $name = preg_replace($substrPattern, $replacement, $name);;
+                            if ($parameters['suppress']) {
+                                $substrPattern = '/' . $parameters['suppress'] . '/i';
+                                $replacement = '';
+                                $name = preg_replace($substrPattern, $replacement, $name);
+                            }
 
                             $active='';
                             if ($callingId==$page['id']) {
@@ -123,7 +127,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                                 $miniMapList .= tpl_link(
                                     wl($page['id']),
                                     $name,
-                                    'class="list-group-item ' . $active . '" title="' . $name . '"',
+                                    'class="list-group-item ' . $active . '" title="' . $title . '('.$page['id'].')"',
                                     $return = true
                                 );
                             }
@@ -149,7 +153,13 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                         $panelHeaderContent = tpl_link(wl($startId), tpl_pagetitle($startId,true), 'title="' . $startId . '"',$return=true);
                     }
                     $miniMapPanel .= '<div class="panel-heading">'.$panelHeaderContent.'  <span class="label label-primary">'.count($pages).' pages</span></div>';
-                    //$miniMapPanel .= '<div class="panel-body">An optional text</div>';
+                    if ($parameters['debug']) {
+                        $miniMapPanel .= '<div class="panel-body">'.
+                            '<B>Debug Information:</B><BR>'.
+                            'CallingId: ('.$callingId.')<BR>'.
+                            'Suppress Option: ('.$parameters['suppress'].')<BR>'.
+                            '</div>';
+                    }
                     $renderer->doc .= $miniMapPanel.$miniMapList.'</div>';
                     break;
             }
