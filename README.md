@@ -4,7 +4,7 @@
 
 The [Minimap Dokuwiki plugin](https://www.dokuwiki.org/plugin:minimap) generates a [sitemap](https://www.dokuwiki.org/index_sitemap?do=index) but only for the current [namespace](https://www.dokuwiki.org/namespaces) (ie mini-map)
 
-By adding the <minimap> tag in your page, you will generate a mini-map.
+By adding the `<minimap>` tag in your page, you will generate a mini-map.
 
 See the mini-map plugin page on Dokuwiki [here](https://www.dokuwiki.org/plugin:minimap)
 
@@ -38,16 +38,18 @@ The use case is when you add to the title of your page already a namespace.
 ## Example
 
 ```xml
-<minimap suppress="Dokuwiki - ">
+<minimap suppress="Dokuwiki - |The Doku - ">
 ```
 
-With the following page title:
+With the following page title,
 ```
 Dokuwiki - Plugin Mini Map
+The Doku - Syntax
 ```
-the mini-map will show the following title:
+The mini-map will show the following page title:
 ```
 Plugin Mini Map
+Syntax
 ```
 
 ## Configuration and Settings
