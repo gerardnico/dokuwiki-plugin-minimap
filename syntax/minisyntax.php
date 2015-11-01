@@ -36,7 +36,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                 $parameters['substr'] = 1;
 
                 // /i not case sensitive
-                $attributePattern = "\\s*(\w+)\\s*=\\s*[\'\"]?([\w\d\s-_\|\*\.]+)[\'\"]?\\s*";
+                $attributePattern = "\\s*(\w+)\\s*=\\s*[\'\"]?([\w\d\s-_\|\*\.\(\)\?\/\\\\]+)[\'\"]?\\s*";
                 $result = preg_match_all('/' . $attributePattern . '/i', $match, $matches);
                 if ($result != 0) {
                     foreach ($matches[1] as $key => $parameterKey) {
