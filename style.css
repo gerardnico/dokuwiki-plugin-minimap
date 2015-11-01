@@ -172,8 +172,8 @@
     text-shadow: 0 -1px 0 #286090;
 }
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
-    background-color: #337ab7;
-    color: #fff;
+    background-color: #337ab7 ! important;
+    color: #fff ! important;
     z-index: 2;
 }
 
