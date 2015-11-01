@@ -1,12 +1,11 @@
 /**
- * style.css for Plugin minimap
- *
- * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @author     Nicolas GERARD
- * Copy from Bootstrap
- *
- */
-
+* style.css for Plugin minimap
+*
+* @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
+* @author     Nicolas GERARD
+* Copy from Bootstrap
+*
+*/
 
 .panel-default {
     border-bottom-color: #ddd;
@@ -162,3 +161,34 @@
     box-sizing: border-box;
 }
 
+/* Active link css */
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-image: linear-gradient(to bottom, #337ab7 0px, #2b669a 100%);
+    background-repeat: repeat-x;
+    border-bottom-color: #2b669a;
+    border-left-color: #2b669a;
+    border-right-color: #2b669a;
+    border-top-color: #2b669a;
+    text-shadow: 0 -1px 0 #286090;
+}
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    background-color: #337ab7;
+    color: #fff;
+    z-index: 2;
+}
+
+.panel-body {
+    clear: both;
+    content: " ";
+    box-sizing: border-box;
+    display: table;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    unicode-bidi: -moz-isolate;
+    color: #333;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+}

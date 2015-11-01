@@ -100,6 +100,9 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                             } else {
                                 $title = $name;
                             }
+                            if ($parameters['debug']){
+                                $title .= ' ('.$page['id'].')';
+                            }
 
                             if ($parameters['suppress']) {
                                 $substrPattern = '/' . $parameters['suppress'] . '/i';
@@ -127,7 +130,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                                 $miniMapList .= tpl_link(
                                     wl($page['id']),
                                     $name,
-                                    'class="list-group-item ' . $active . '" title="' . $title . '('.$page['id'].')"',
+                                    'class="list-group-item ' . $active . '" title="' . $title . '"',
                                     $return = true
                                 );
                             }
