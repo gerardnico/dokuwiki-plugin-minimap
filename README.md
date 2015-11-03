@@ -27,13 +27,14 @@ Install the plugin using:
 ## Syntax
 
 ```xml
-<minimap suppress="regular expression pattern">
+<minimap suppress="regular expression pattern" debug="false">
 ```
 
 where:
 
   * the "suppress" option will suppress the "regular expression pattern" part of the page title. It uses the function [preg_replace](http://php.net/manual/en/function.preg-replace.php). Actually in the pattern, letters, digits and the following characters are allowed: space, -, _, |, *, .
 The use case is when you add to the title of your page already a namespace.
+  * the "debug"" parameter prints debug information if set to true below the panel header and in the link title (Default=false)
 
 ## Example
 
