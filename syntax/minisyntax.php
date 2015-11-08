@@ -128,7 +128,13 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
                         $print = true;
                         if ($page[id] == $page['ns'] . ':' . $page['ns']) {
-                            $print = false;
+                            // If the start page exists, the page with the same name
+                            // than the namespace must be shown
+                            if (page_exists($page['ns'] . ':' . $startConf) ) {
+                                $print = true;
+                            } else {
+                                $print = false;
+                            }
                             $homePageFound = true;
                         } else if ($page[id] == $page['ns'] . ':' . $startConf) {
                             $print = false;
@@ -140,7 +146,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         if ($print) {
                             $miniMapList .= tpl_link(
                                 wl($page['id']),
-                                $name,
+                                ucfirst($name), // First letter upper case
                                 'class="list-group-item ' . $active . '" title="' . $title . '"',
                                 $return = true
                             );
@@ -152,10 +158,10 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     // Build the panel header
                     $miniMapPanel = '<div class="panel panel-default">';
                     if ($startPageFound) {
-                        $startId = $homePageNamespace;
+                        $startId = $startPageNamespace;
                     } else {
                         if ($homePageFound) {
-                            $startId = $startPageNamespace;
+                            $startId = $homePageNamespace;
                         } else {
                             $panelHeaderContent = 'No Home Page found';
                         }
