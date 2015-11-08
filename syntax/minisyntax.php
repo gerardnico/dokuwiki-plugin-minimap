@@ -5,24 +5,29 @@
  * @license GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author  Nicolas GERARD
  */
-if(!defined('DOKU_INC')) die();
+if (!defined('DOKU_INC')) die();
 
 
-class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
+{
 
-    function connectTo($aMode) {
-        $this->Lexer->addSpecialPattern('<minimap[^>]*>', $aMode, 'plugin_minimap_'.$this->getPluginComponent());
+    function connectTo($aMode)
+    {
+        $this->Lexer->addSpecialPattern('<minimap[^>]*>', $aMode, 'plugin_minimap_' . $this->getPluginComponent());
     }
 
-    function getSort() {
+    function getSort()
+    {
         return 150;
     }
 
-    function getType() {
+    function getType()
+    {
         return 'substition';
     }
 
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, &$handler)
+    {
 
         switch ($state) {
 
@@ -52,11 +57,12 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
         $pages = $this->getPagesOfNamespace($currentNameSpace);
 
         // Cache the values
-        return array($state,$pages,$parameters,$currentNameSpace);
+        return array($state, $pages, $parameters, $currentNameSpace);
     }
 
 
-    function render($mode, &$renderer, $data) {
+    function render($mode, &$renderer, $data)
+    {
 
         // The $data variable comes from the handle() function
         //
@@ -82,10 +88,10 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                     // with the start conf of the name of the last map
                     global $conf;
                     $parts = explode(':', $currentNameSpace);
-                    $lastContainingNameSpace = $parts[count($parts)-1];
-                    $homePageNamespace=$currentNameSpace.':'.$lastContainingNameSpace;
+                    $lastContainingNameSpace = $parts[count($parts) - 1];
+                    $homePageNamespace = $currentNameSpace . ':' . $lastContainingNameSpace;
                     $startConf = $conf['start'];
-                    $startPageNamespace=$currentNameSpace.':'.$startConf;
+                    $startPageNamespace = $currentNameSpace . ':' . $startConf;
 
                     // Build the list of page
                     $miniMapList = '<div class="list-group">';
@@ -94,51 +100,50 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
                         $pageNum++;
                         // page names
                         $name = noNSorNS($page['id']);
-                        if(useHeading('navigation')) {
+                        $title = '';
+                        if (useHeading('navigation')) {
                             // get page title
                             $title = p_get_first_heading($page['id'], METADATA_RENDER_USING_SIMPLE_CACHE);
-                            if($title) {
-                                $name = $title;
-                            } else {
-                                $title = $name;
-                            }
-                            if ($parameters['debug']){
-                                $title .= ' ('.$page['id'].')';
-                            }
-                            $title .= ' ('.$pageNum.')';
+                        }
+                        if ($title) {
+                            $name = $title;
+                        } else {
+                            $title = $name;
+                        }
+                        if ($parameters['debug']) {
+                            $title .= ' (' . $page['id'] . ')';
+                        }
+                        $title .= ' (' . $pageNum . ')';
 
-                            if ($parameters['suppress']) {
-                                $substrPattern = '/' . $parameters['suppress'] . '/i';
-                                $replacement = '';
-                                $name = preg_replace($substrPattern, $replacement, $name);
-                            }
+                        if ($parameters['suppress']) {
+                            $substrPattern = '/' . $parameters['suppress'] . '/i';
+                            $replacement = '';
+                            $name = preg_replace($substrPattern, $replacement, $name);
+                        }
 
-                            $active='';
-                            if ($callingId==$page['id']) {
-                                $active='active';
-                            }
+                        $active = '';
+                        if ($callingId == $page['id']) {
+                            $active = 'active';
+                        }
 
-                            $print = true;
-                            if ($page[id] == $page['ns'].':'.$page['ns']) {
-                                $print=false;
-                                $homePageFound=true;
-                            } else if ($page[id] == $page['ns'].':'.$startConf) {
-                                $print=false;
-                                $startPageFound=true;
-                            } else if ($page[id] == $page['ns'].':'.$conf['sidebar']){
-                                $print=false;
-                            };
+                        $print = true;
+                        if ($page[id] == $page['ns'] . ':' . $page['ns']) {
+                            $print = false;
+                            $homePageFound = true;
+                        } else if ($page[id] == $page['ns'] . ':' . $startConf) {
+                            $print = false;
+                            $startPageFound = true;
+                        } else if ($page[id] == $page['ns'] . ':' . $conf['sidebar']) {
+                            $print = false;
+                        };
 
-                            if ($print) {
-                                $miniMapList .= tpl_link(
-                                    wl($page['id']),
-                                    $name,
-                                    'class="list-group-item ' . $active . '" title="' . $title . '"',
-                                    $return = true
-                                );
-                            }
-
-
+                        if ($print) {
+                            $miniMapList .= tpl_link(
+                                wl($page['id']),
+                                $name,
+                                'class="list-group-item ' . $active . '" title="' . $title . '"',
+                                $return = true
+                            );
                         }
 
                     }
@@ -146,27 +151,27 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
 
                     // Build the panel header
                     $miniMapPanel = '<div class="panel panel-default">';
-                    if ($homePageFound) {
+                    if ($startPageFound) {
                         $startId = $homePageNamespace;
                     } else {
-                        if ($startPageFound) {
+                        if ($homePageFound) {
                             $startId = $startPageNamespace;
                         } else {
                             $panelHeaderContent = 'No Home Page found';
                         }
                     }
                     if (!$panelHeaderContent) {
-                        $panelHeaderContent = tpl_link(wl($startId), tpl_pagetitle($startId,true), 'title="' . $startId . '"',$return=true);
+                        $panelHeaderContent = tpl_link(wl($startId), tpl_pagetitle($startId, true), 'title="' . $startId . '"', $return = true);
                     }
-                    $miniMapPanel .= '<div class="panel-heading">'.$panelHeaderContent.'  <span class="label label-primary">'.count($pages).' pages</span></div>';
+                    $miniMapPanel .= '<div class="panel-heading">' . $panelHeaderContent . '  <span class="label label-primary">' . count($pages) . ' pages</span></div>';
                     if ($parameters['debug']) {
-                        $miniMapPanel .= '<div class="panel-body">'.
-                            '<B>Debug Information:</B><BR>'.
-                            'CallingId: ('.$callingId.')<BR>'.
-                            'Suppress Option: ('.$parameters['suppress'].')<BR>'.
+                        $miniMapPanel .= '<div class="panel-body">' .
+                            '<B>Debug Information:</B><BR>' .
+                            'CallingId: (' . $callingId . ')<BR>' .
+                            'Suppress Option: (' . $parameters['suppress'] . ')<BR>' .
                             '</div>';
                     }
-                    $renderer->doc .= $miniMapPanel.$miniMapList.'</div>';
+                    $renderer->doc .= $miniMapPanel . $miniMapList . '</div>';
                     break;
             }
 
@@ -184,11 +189,12 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin {
      * @param string $sort 'natural' to use natural order sorting (default); 'date' to sort by filemtime
      * @return array An array of the pages for the namespace
      */
-    function getPagesOfNamespace($namespace, $sort='natural') {
-        require_once(DOKU_INC.'inc/search.php');
+    function getPagesOfNamespace($namespace, $sort = 'natural')
+    {
+        require_once(DOKU_INC . 'inc/search.php');
         global $conf;
 
-        $ns = ':'.cleanID($namespace);
+        $ns = ':' . cleanID($namespace);
         // ns as a path
         $ns = utf8_encodeFN(str_replace(':', '/', $ns));
 
