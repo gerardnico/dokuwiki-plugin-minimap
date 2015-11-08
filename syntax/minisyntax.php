@@ -53,11 +53,12 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
 
         global $ID;
-        $currentNameSpace = getNS($ID);
-        $pages = $this->getPagesOfNamespace($currentNameSpace);
+        $nameSpacePath = getNS($ID); // The complete path to the directory
+        $curNameSpace = curNS($ID); // The name of the container directory
+        $pages = $this->getPagesOfNamespace($nameSpacePath);
 
         // Cache the values
-        return array($state, $pages, $parameters, $currentNameSpace);
+        return array($state, $pages, $parameters, $nameSpacePath, $curNameSpace);
     }
 
 
@@ -70,7 +71,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
         // There is other mode such as metadata where you can output data for the headers (Not 100% sure)
         if ($mode == 'xhtml') {
 
-            list($state, $pages, $parameters, $currentNameSpace) = $data;
+            list($state, $pages, $parameters, $nameSpacePath, $currentNameSpace) = $data;
 
             global $ID;
             global $INFO;
@@ -87,11 +88,11 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     // Set the two possible home page for the namespace
                     // with the start conf of the name of the last map
                     global $conf;
-                    $parts = explode(':', $currentNameSpace);
+                    $parts = explode(':', $nameSpacePath);
                     $lastContainingNameSpace = $parts[count($parts) - 1];
-                    $homePageNamespace = $currentNameSpace . ':' . $lastContainingNameSpace;
+                    $homePageNamespace = $nameSpacePath . ':' . $lastContainingNameSpace;
                     $startConf = $conf['start'];
-                    $startPageNamespace = $currentNameSpace . ':' . $startConf;
+                    $startPageNamespace = $nameSpacePath . ':' . $startConf;
 
                     // Build the list of page
                     $miniMapList = '<div class="list-group">';
@@ -127,7 +128,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         }
 
                         $print = true;
-                        if ($page[id] == $page['ns'] . ':' . $page['ns']) {
+                        if ($page[id] == $page['ns'] . ':' . $currentNameSpace) {
                             // If the start page exists, the page with the same name
                             // than the namespace must be shown
                             if (page_exists($page['ns'] . ':' . $startConf) ) {
