@@ -18,8 +18,7 @@ class action_plugin_minimap extends Dokuwiki_Action_Plugin {
             'type'   => 'format',
             'title'  => $this->getLang('MiniMapButtonTitle').' ('.$this->getLang('AccessKey').': '.$minimapShortcutKey.')',
             'icon'   => '../../plugins/minimap/images/minimap.png',
-            'open'   => '<minimap suppress="">\n',
-            'close'  => '',
+            'insert' => '<minimap suppress="">\n',
             'key'    => $minimapShortcutKey
         );
     }
