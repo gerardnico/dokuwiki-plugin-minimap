@@ -15,11 +15,12 @@ class action_plugin_minimap extends Dokuwiki_Action_Plugin {
         $minimapShortcutKey = $this->getConf('WebCodeShortCutKey');
 
         $event->data[] = array(
-            'type'   => 'format',
+            'type'   => 'insert',
             'title'  => $this->getLang('MiniMapButtonTitle').' ('.$this->getLang('AccessKey').': '.$minimapShortcutKey.')',
             'icon'   => '../../plugins/minimap/images/minimap.png',
             'insert' => '<minimap suppress="">\n',
-            'key'    => $minimapShortcutKey
+            'key'    => $minimapShortcutKey,
+            'block' => true
         );
     }
 }
