@@ -7,14 +7,15 @@
 *
 */
 
-.panel-default {
+#minimap__plugin .panel-default {
     border-bottom-color: #ddd;
     border-left-color: #ddd;
     border-right-color: #ddd;
     border-top-color: #ddd;
     box-sizing: border-box;
 }
-.panel {
+
+#minimap__plugin .panel {
     box-sizing: border-box;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     -moz-border-bottom-colors: none;
@@ -42,12 +43,12 @@
     margin-bottom: 20px;
     display: block;
     color: #333;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857;
 }
 
-.panel-default > .panel-heading {
+#minimap__plugin .panel-default > .panel-heading {
     background-image: linear-gradient(to bottom, #f5f5f5 0px, #e8e8e8 100%);
     background-repeat: repeat-x;
     background-color: #f5f5f5;
@@ -57,7 +58,8 @@
     border-top-color: #ddd;
     color: #333;
 }
-.panel-heading {
+
+#minimap__plugin .panel-heading {
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-top-left-radius: 3px;
@@ -68,35 +70,35 @@
     padding-top: 10px;
     box-sizing: border-box;
     display: block;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857;
 }
 
-.panel > .list-group, .panel > .panel-collapse > .list-group {
+#minimap__plugin .panel > .list-group, #minimap__plugin .panel > .panel-collapse > .list-group {
     margin-bottom: 0;
 }
-.list-group {
+
+#minimap__plugin .list-group {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075);
-}
-.list-group {
     padding-left: 0;
     box-sizing: border-box;
     color: #333;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857;
 }
 
-.panel-heading + .list-group .list-group-item:first-child {
+#minimap__plugin .panel-heading + .list-group .list-group-item:first-child {
     border-top-width: 0;
 }
 
-.panel > .list-group .list-group-item, .panel > .panel-collapse > .list-group .list-group-item {
+#minimap__plugin .panel > .list-group .list-group-item,
+#minimap__plugin .panel > .panel-collapse > .list-group .list-group-item {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-bottom-width: 1px;
@@ -106,7 +108,7 @@
     border-top-right-radius: 0;
 }
 
-.list-group-item {
+#minimap__plugin .list-group-item {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -133,15 +135,16 @@
     padding-top: 10px;
     position: relative;
     box-sizing: border-box;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857;
 }
 
-.label-primary {
+#minimap__plugin .label-primary {
     background-color: #337ab7;
 }
-.label {
+
+#minimap__plugin .label {
     border-bottom-left-radius: 0.25em;
     border-bottom-right-radius: 0.25em;
     border-top-left-radius: 0.25em;
@@ -162,7 +165,9 @@
 }
 
 /* Active link css */
-.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+#minimap__plugin .list-group-item.active,
+#minimap__plugin .list-group-item.active:focus,
+#minimap__plugin .list-group-item.active:hover {
     background-image: linear-gradient(to bottom, #337ab7 0px, #2b669a 100%);
     background-repeat: repeat-x;
     border-bottom-color: #2b669a;
@@ -171,13 +176,16 @@
     border-top-color: #2b669a;
     text-shadow: 0 -1px 0 #286090;
 }
-.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+
+#minimap__plugin .list-group-item.active,
+#minimap__plugin .list-group-item.active:focus,
+#minimap__plugin .list-group-item.active:hover {
     background-color: #337ab7 ! important;
     color: #fff ! important;
     z-index: 2;
 }
 
-.panel-body {
+#minimap__plugin .panel-body {
     clear: both;
     content: " ";
     box-sizing: border-box;
@@ -188,7 +196,7 @@
     padding-top: 15px;
     unicode-bidi: -moz-isolate;
     color: #333;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857;
 }

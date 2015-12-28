@@ -55,8 +55,18 @@ Syntax
 
 ## Configuration and Settings
 
+### Toolbar Shortcut
+A button ![The Button](https://github.com/gerardnico/dokuwiki-plugin-minimap/blob/master/images/minimap.png "MiniMap Button") is added in the toolbar, you can choose the shortcut key in the [configuration manager](https://www.dokuwiki.org/plugin:config).
 
-  * A button is added in the toolbar, you can choose the shortcut key in the [configuration manager](https://www.dokuwiki.org/plugin:config).
+### Cache
+As this plugin has a lot of chance to be used in a [sidebar](https://www.dokuwiki.org/faq:sidebar), you may want to add a `~~NOCACHE~~` [macro](https://www.dokuwiki.org/wiki:syntax#control_macros)
 
 
+## Releases History
+
+  * 2015-12-28:
+     * The styling is now targeted only for the mini-map elements and will not interfere with the admin page. See [Issue 2](https://github.com/gerardnico/dokuwiki-plugin-minimap/issues/2).
+     * The handle function of the syntax class does not have any other variable instantiation than the one in the syntax.
+  * 2015-10-25:
+     * First Release.
 

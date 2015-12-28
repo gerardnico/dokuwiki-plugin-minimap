@@ -26,6 +26,9 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
         return 'substition';
     }
 
+    // The handle function goal is to parse the matched syntax through the pattern function
+    // and to return the result for use in the renderer
+    // This result is always cached until the page is modified.
     function handle($match, $state, $pos, &$handler)
     {
 
@@ -51,14 +54,8 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
         }
 
-
-        global $ID;
-        $nameSpacePath = getNS($ID); // The complete path to the directory
-        $curNameSpace = curNS($ID); // The name of the container directory
-        $pages = $this->getPagesOfNamespace($nameSpacePath);
-
         // Cache the values
-        return array($state, $pages, $parameters, $nameSpacePath, $curNameSpace);
+        return array($state, $parameters);
     }
 
 
@@ -71,33 +68,43 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
         // There is other mode such as metadata where you can output data for the headers (Not 100% sure)
         if ($mode == 'xhtml') {
 
-            list($state, $pages, $parameters, $nameSpacePath, $currentNameSpace) = $data;
+            // Unfold the $data array in two separates variables
+            list($state, $parameters) = $data;
 
-            global $ID;
-            global $INFO;
-            $callingId = $ID;
-            // If it's a sidebar, get the original id.
-            if ($INFO != null) {
-                $callingId = $INFO['id'];
-            }
-
+            // As there is only one call to connect to in order to a add a pattern,
+            // there is only one state entering the function
+            // but I leave it for better understanding of the process flow
             switch ($state) {
 
                 case DOKU_LEXER_SPECIAL :
 
-                    // Set the two possible home page for the namespace
-                    // with the start conf of the name of the last map
+                    global $ID;
+                    global $INFO;
+                    $callingId = $ID;
+                    // If mini-map is in a sidebar, we don't want the ID of the sidebar
+                    // but the ID of the page.
+                    if ($INFO != null) {
+                        $callingId = $INFO['id'];
+                    }
+
+                    $nameSpacePath = getNS($callingId); // The complete path to the directory
+                    $currentNameSpace = curNS($callingId); // The name of the container directory
+                    $pagesOfNamespace = $this->getPagesOfNamespace($nameSpacePath);
+
+                    // Set the two possible home page for the namespace ie:
+                    //   - the name of the containing map ($homePageWithContainingMapName)
+                    //   - the start conf parameters ($homePageWithStartConf)
                     global $conf;
                     $parts = explode(':', $nameSpacePath);
                     $lastContainingNameSpace = $parts[count($parts) - 1];
-                    $homePageNamespace = $nameSpacePath . ':' . $lastContainingNameSpace;
+                    $homePageWithContainingMapName = $nameSpacePath . ':' . $lastContainingNameSpace;
                     $startConf = $conf['start'];
-                    $startPageNamespace = $nameSpacePath . ':' . $startConf;
+                    $homePageWithStartConf = $nameSpacePath . ':' . $startConf;
 
                     // Build the list of page
                     $miniMapList = '<div class="list-group">';
                     $pageNum = 0;
-                    foreach ($pages as $page) {
+                    foreach ($pagesOfNamespace as $page) {
                         $pageNum++;
                         // page names
                         $name = noNSorNS($page['id']);
@@ -157,12 +164,12 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     $miniMapList .= '</div>'; // End list-group
 
                     // Build the panel header
-                    $miniMapPanel = '<div class="panel panel-default">';
+                    $miniMapPanel = '<div id="minimap__plugin"><div class="panel panel-default">';
                     if ($startPageFound) {
-                        $startId = $startPageNamespace;
+                        $startId = $homePageWithStartConf;
                     } else {
                         if ($homePageFound) {
-                            $startId = $homePageNamespace;
+                            $startId = $homePageWithContainingMapName;
                         } else {
                             $panelHeaderContent = 'No Home Page found';
                         }
@@ -170,7 +177,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     if (!$panelHeaderContent) {
                         $panelHeaderContent = tpl_link(wl($startId), tpl_pagetitle($startId, true), 'title="' . $startId . '"', $return = true);
                     }
-                    $miniMapPanel .= '<div class="panel-heading">' . $panelHeaderContent . '  <span class="label label-primary">' . count($pages) . ' pages</span></div>';
+                    $miniMapPanel .= '<div class="panel-heading">' . $panelHeaderContent . '  <span class="label label-primary">' . count($pagesOfNamespace) . ' pages</span></div>';
                     if ($parameters['debug']) {
                         $miniMapPanel .= '<div class="panel-body">' .
                             '<B>Debug Information:</B><BR>' .
@@ -178,7 +185,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                             'Suppress Option: (' . $parameters['suppress'] . ')<BR>' .
                             '</div>';
                     }
-                    $renderer->doc .= $miniMapPanel . $miniMapList . '</div>';
+                    $renderer->doc .= $miniMapPanel . $miniMapList . '</div></div>';
                     break;
             }
 
