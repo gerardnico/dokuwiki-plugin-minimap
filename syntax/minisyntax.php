@@ -29,7 +29,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
     // The handle function goal is to parse the matched syntax through the pattern function
     // and to return the result for use in the renderer
     // This result is always cached until the page is modified.
-    function handle($match, $state, $pos, &$handler)
+    function handle($match, $state, $pos, Doku_Handler $handler)
     {
 
         switch ($state) {
@@ -59,7 +59,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
     }
 
 
-    function render($mode, &$renderer, $data)
+    function render($mode, Doku_Renderer $renderer, $data)
     {
 
         // The $data variable comes from the handle() function
