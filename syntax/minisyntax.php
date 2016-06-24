@@ -89,7 +89,12 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
                     $nameSpacePath = getNS($callingId); // The complete path to the directory
                     $currentNameSpace = curNS($callingId); // The name of the container directory
-                    $pagesOfNamespace = $this->getPagesOfNamespace($nameSpacePath);
+                    if ($parameters['includedirectory']){
+                        $includeDirectory = $parameters['includedirectory'];
+                    } else {
+                        $includeDirectory = false;
+                    }
+                    $pagesOfNamespace = $this->getNamespaceChildren($nameSpacePath, true, $includeDirectory);
 
                     // Set the two possible home page for the namespace ie:
                     //   - the name of the containing map ($homePageWithContainingMapName)
@@ -106,37 +111,67 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     $pageNum = 0;
                     $pagesCount = count($pagesOfNamespace); // number of pages in the namespace
                     foreach ($pagesOfNamespace as $page) {
-                        $pageNum++;
-                        // page names
-                        $name = noNSorNS($page['id']);
+
+                        // The title of the page
                         $title = '';
-                        if (useHeading('navigation')) {
-                            // get page title
-                            $title = p_get_first_heading($page['id'], METADATA_RENDER_USING_SIMPLE_CACHE);
+
+                        // If it's a directory
+                        if ($page['type']=="d") {
+
+                            $pageId = $this->getNamespaceStartId($page['id']);
+
+                            if (useHeading('navigation')) {
+                                // get page title
+                                // The page array doesn't return the page title for a namespace :(
+                                $title = p_get_first_heading($pageId, METADATA_RENDER_USING_SIMPLE_CACHE);
+                            }
+
+                        } else {
+
+                            $pageNum++;
+                            $pageId = $page['id'];
+
+                            if (useHeading('navigation')) {
+                                // get page title
+                                $title = $page['title'];
+                            }
                         }
+
+                        // Name if the variable that it's shown. A part of it can be suppressed
+                        // Title will stay full in the link
+                        $name = noNSorNS($pageId);
                         if ($title) {
                             $name = $title;
                         } else {
                             $title = $name;
                         }
+
+                        // If debug mode
                         if ($parameters['debug']) {
-                            $title .= ' (' . $page['id'] . ')';
+                            $title .= ' (' . $pageId . ')';
                         }
+
+                        // Add the page nummer in the URL title
                         $title .= ' (' . $pageNum . ')';
 
+                        // Suppress the parts in the name with the regexp defines in the 'suppress' params
                         if ($parameters['suppress']) {
                             $substrPattern = '/' . $parameters['suppress'] . '/i';
                             $replacement = '';
                             $name = preg_replace($substrPattern, $replacement, $name);
                         }
 
+                        // See in which page we are
+                        // The style will then change
                         $active = '';
-                        if ($callingId == $page['id']) {
+                        if ($callingId == $pageId) {
                             $active = 'active';
                         }
 
+                        // Not all page are printed
+                        // sidebar are not for instance
                         $print = true;
-                        if ($page[id] == $page['ns'] . ':' . $currentNameSpace) {
+                        if ($page['id'] == $page['ns'] . ':' . $currentNameSpace) {
                             // If the start page exists, the page with the same name
                             // than the namespace must be shown
                             if (page_exists($page['ns'] . ':' . $startConf) ) {
@@ -145,21 +180,37 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                                 $print = false;
                             }
                             $homePageFound = true;
-                        } else if ($page[id] == $page['ns'] . ':' . $startConf) {
+                        } else if ($page['id'] == $page['ns'] . ':' . $startConf) {
                             $print = false;
                             $startPageFound = true;
-                        } else if ($page[id] == $page['ns'] . ':' . $conf['sidebar']) {
+                        } else if ($page['id'] == $page['ns'] . ':' . $conf['sidebar']) {
                             $pagesCount -= 1;
                             $print = false;
                         };
 
+
+                        // If the page must be printed, build the link
                         if ($print) {
+
+                            // Open the item tag
+                            $miniMapList .= "<li class=\"list-group-item" . $active . "\">";
+
+                            // Add a glyphicon if it's a directory
+                            if ($page['type']=="d"){
+                                $miniMapList .= "<span class=\"glyphicon glyphicon-folder-open\" aria-hidden=\"true\"></span>&nbsp;&nbsp;";
+                            }
+
+                            // Add the link
                             $miniMapList .= tpl_link(
-                                wl($page['id']),
+                                wl($pageId),
                                 ucfirst($name), // First letter upper case
-                                'class="list-group-item ' . $active . '" title="' . $title . '"',
+                                'title="' . $title . '"',
                                 $return = true
                             );
+
+                            // Close the item
+                            $miniMapList .= "</li>";
+
                         }
 
                     }
@@ -199,14 +250,15 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
     }
 
     /**
-     * Return all pages of a namespace
+     * Return all pages and/of sub-namespaces (subdirectory) of a namespace (ie directory)
      * Adapted from feed.php
      *
      * @param $namespace The container of the pages
      * @param string $sort 'natural' to use natural order sorting (default); 'date' to sort by filemtime
+     * @param $listdirs - Add the directory to the list of files
      * @return array An array of the pages for the namespace
      */
-    function getPagesOfNamespace($namespace, $sort = 'natural')
+    function getNamespaceChildren($namespace, $sort = 'natural', $listdirs = false)
     {
         require_once(DOKU_INC . 'inc/search.php');
         global $conf;
@@ -216,15 +268,48 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
         $ns = utf8_encodeFN(str_replace(':', '/', $ns));
 
         $data = array();
+
+        // Options of the callback function search_universal
+        // in the search.php file
         $search_opts = array(
             'depth' => 1,
             'pagesonly' => true,
-            'listfiles' => true
+            'listfiles' => true,
+            'listdirs' => $listdirs,
+            'firsthead' => true
         );
-        // search_universal is a function in inc/search.php that accetps the $search_opts parameters
+        // search_universal is a function in inc/search.php that accepts the $search_opts parameters
         search($data, $conf['datadir'], 'search_universal', $search_opts, $ns, $lvl = 1, $sort);
 
         return $data;
+    }
+
+    /**
+     * Return the id of the start page of a namespace
+     *
+     * @param $id an id of a namespace (directory)
+     * @return string the id of the home page
+     */
+    function getNamespaceStartId($id){
+
+        global $conf;
+
+        $id = $id.":";
+
+        if(page_exists($id.$conf['start'])){
+            // start page inside namespace
+            $homePageId = $id.$conf['start'];
+        }elseif(page_exists($id.noNS(cleanID($id)))){
+            // page named like the NS inside the NS
+            $homePageId = $id.noNS(cleanID($id));
+        }elseif(page_exists($id)){
+            // page like namespace exists
+            $homePageId = substr($id,0,-1);
+        } else {
+            // fall back to default
+            $homePageId = $id.$conf['start'];
+        }
+        return $homePageId;
     }
 
 

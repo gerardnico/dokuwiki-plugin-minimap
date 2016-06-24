@@ -200,3 +200,8 @@
     font-size: 14px;
     line-height: 1.42857;
 }
+
+#minimap__plugin .glyphicon {
+    /*already same color than the header*/
+    color: #d8d2d2;
+}

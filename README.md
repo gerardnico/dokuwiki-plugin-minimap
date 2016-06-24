@@ -27,14 +27,15 @@ Install the plugin using:
 ## Syntax
 
 ```xml
-<minimap suppress="regular expression pattern" debug="false">
+<minimap suppress="regular expression pattern" includeDirectory="false" debug="false">
 ```
 
 where:
 
-  * the "suppress" option will suppress the "regular expression pattern" part of the page title. It uses the function [preg_replace](http://php.net/manual/en/function.preg-replace.php). Actually in the pattern, letters, digits and the following characters are allowed: space, -, _, |, *, .
+  * the `suppress` option will suppress the "regular expression pattern" part of the page title. It uses the function [preg_replace](http://php.net/manual/en/function.preg-replace.php). Actually in the pattern, letters, digits and the following characters are allowed: space, -, _, |, *, .
 The use case is when you add to the title of your page already a namespace.
-  * the "debug"" parameter prints debug information if set to true below the panel header and in the link title (Default=false)
+  * the `includeDirectory` permits to include the subdirectories in the list (Default=false)
+  * the `debug` parameter prints debug information if set to true below the panel header and in the link title (Default=false)
 
 ## Example
 
@@ -64,6 +65,8 @@ As this plugin has a lot of chance to be used in a [sidebar](https://www.dokuwik
 
 ## Releases History
 
+  * 2016-06-04:
+     * The `includeDirectory` option was added.
   * 2015-12-28:
      * The styling is now targeted only for the mini-map elements and will not interfere with the admin page. See [Issue 2](https://github.com/gerardnico/dokuwiki-plugin-minimap/issues/2).
      * The handle function of the syntax class does not have any other variable instantiation than the one in the syntax.
