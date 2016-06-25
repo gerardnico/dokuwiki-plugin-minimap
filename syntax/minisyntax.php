@@ -109,7 +109,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     // Build the list of page
                     $miniMapList = '<div class="list-group">';
                     $pageNum = 0;
-                    $pagesCount = count($pagesOfNamespace); // number of pages in the namespace
+                    //$pagesCount = count($pagesOfNamespace); // number of pages in the namespace
                     foreach ($pagesOfNamespace as $page) {
 
                         // The title of the page
@@ -184,7 +184,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                             $print = false;
                             $startPageFound = true;
                         } else if ($page['id'] == $page['ns'] . ':' . $conf['sidebar']) {
-                            $pagesCount -= 1;
+                            $pageNum -= 1;
                             $print = false;
                         };
 
@@ -193,7 +193,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         if ($print) {
 
                             // Open the item tag
-                            $miniMapList .= "<li class=\"list-group-item" . $active . "\">";
+                            $miniMapList .= "<li class=\"list-group-item " . $active . "\">";
 
                             // Add a glyphicon if it's a directory
                             if ($page['type']=="d"){
@@ -231,7 +231,10 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         $panelHeaderContent = tpl_link(wl($startId), tpl_pagetitle($startId, true), 'title="' . $startId . '"', $return = true);
                     }
 
-                    $miniMapPanel .= '<div class="panel-heading">' . $panelHeaderContent . '  <span class="label label-primary">' . $pagesCount . ' pages</span></div>';
+                    // We are not counting the header page
+                    $pageNum--;
+
+                    $miniMapPanel .= '<div class="panel-heading">' . $panelHeaderContent . '  <span class="label label-primary">' . $pageNum . ' pages</span></div>';
                     if ($parameters['debug']) {
                         $miniMapPanel .= '<div class="panel-body">' .
                             '<B>Debug Information:</B><BR>' .
