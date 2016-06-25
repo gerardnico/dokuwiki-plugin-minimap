@@ -94,7 +94,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     } else {
                         $includeDirectory = false;
                     }
-                    $pagesOfNamespace = $this->getNamespaceChildren($nameSpacePath, true, $includeDirectory);
+                    $pagesOfNamespace = $this->getNamespaceChildren($nameSpacePath, $sort='natural', $listdirs = $includeDirectory);
 
                     // Set the two possible home page for the namespace ie:
                     //   - the name of the containing map ($homePageWithContainingMapName)
