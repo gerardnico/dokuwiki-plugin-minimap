@@ -64,7 +64,9 @@ As this plugin has a lot of chance to be used in a [sidebar](https://www.dokuwik
 
 
 ## Releases History
-
+  * 2017-4-29:
+     * The list item are working now with the mathjax plugin. The HTML tag were not encoded
+     * The list items have no a left margin of 0. It was overwritten by the standard dokuwiki template
   * 2016-06-04:
      * The `includeDirectory` option was added.
   * 2015-12-28:

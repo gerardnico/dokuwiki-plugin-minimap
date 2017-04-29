@@ -120,21 +120,21 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
                             $pageId = $this->getNamespaceStartId($page['id']);
 
-                            if (useHeading('navigation')) {
-                                // get page title
-                                // The page array doesn't return the page title for a namespace :(
-                                $title = p_get_first_heading($pageId, METADATA_RENDER_USING_SIMPLE_CACHE);
-                            }
-
                         } else {
 
                             $pageNum++;
                             $pageId = $page['id'];
 
-                            if (useHeading('navigation')) {
-                                // get page title
-                                $title = $page['title'];
-                            }
+                        }
+
+                        // The title of the page
+                        if (useHeading('navigation')) {
+                            // $title = $page['title'] can not be used to retrieve the title
+                            // because it didn't encode the HTML tag
+                            // for instance if <math></math> is used, the output must have &lgt ...
+                            // otherwise browser may add quote and the math plugin will not work
+                            // May be a solution was just to encode the output
+                            $title = tpl_pagetitle($pageId, true);
                         }
 
                         // Name if the variable that it's shown. A part of it can be suppressed
@@ -235,7 +235,11 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         }
                     }
                     if (!$panelHeaderContent) {
-                        $panelHeaderContent = tpl_link(wl($startId), tpl_pagetitle($startId, true), 'title="' . $startId . '"', $return = true);
+                        $panelHeaderContent = tpl_link(
+                            wl($startId),
+                            tpl_pagetitle($startId, true),
+                            'title="' . $startId . '"',
+                            $return = true);
                     }
 
                     // We are not counting the header page
