@@ -170,20 +170,27 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
                         // Not all page are printed
                         // sidebar are not for instance
+
+                        // Are we in the root ?
+                        if ($page['ns']) {
+                            $nameSpacePathPrefix = $page['ns'] . ':';
+                        } else {
+                            $nameSpacePathPrefix = '';
+                        }
                         $print = true;
-                        if ($page['id'] == $page['ns'] . ':' . $currentNameSpace) {
+                        if ($page['id'] == $nameSpacePathPrefix . $currentNameSpace) {
                             // If the start page exists, the page with the same name
                             // than the namespace must be shown
-                            if (page_exists($page['ns'] . ':' . $startConf) ) {
+                            if (page_exists($nameSpacePathPrefix . $startConf) ) {
                                 $print = true;
                             } else {
                                 $print = false;
                             }
                             $homePageFound = true;
-                        } else if ($page['id'] == $page['ns'] . ':' . $startConf) {
+                        } else if ($page['id'] == $nameSpacePathPrefix . $startConf) {
                             $print = false;
                             $startPageFound = true;
-                        } else if ($page['id'] == $page['ns'] . ':' . $conf['sidebar']) {
+                        } else if ($page['id'] == $nameSpacePathPrefix . $conf['sidebar']) {
                             $pageNum -= 1;
                             $print = false;
                         };
