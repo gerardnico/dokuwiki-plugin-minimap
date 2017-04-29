@@ -128,13 +128,13 @@
     border-top-color: #ddd;
     border-top-style: solid;
     display: block;
-    margin-bottom: -1px;
     padding-bottom: 10px;
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 10px;
     position: relative;
     box-sizing: border-box;
+    margin: 0 0 -1px;
 }
 
 #minimap__plugin .label-primary {
