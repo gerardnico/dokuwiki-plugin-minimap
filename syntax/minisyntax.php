@@ -23,7 +23,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
     function getType()
     {
-        return 'substition';
+        return 'substitution';
     }
 
     // The handle function goal is to parse the matched syntax through the pattern function
@@ -204,7 +204,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
                             // Add a glyphicon if it's a directory
                             if ($page['type']=="d"){
-                                $miniMapList .= "<span class=\"glyphicon glyphicon-folder-open\" aria-hidden=\"true\"></span>&nbsp;&nbsp;";
+                                $miniMapList .= "<span class=\"nicon_folder_open\" aria-hidden=\"true\"></span>&nbsp;&nbsp;";
                             }
 
                             // Add the link
