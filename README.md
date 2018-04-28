@@ -64,6 +64,8 @@ As this plugin has a lot of chance to be used in a [sidebar](https://www.dokuwik
 
 
 ## Releases History
+  * 2018-04-28
+     * The plugin is now Bootstrap 4 compatible. The icons were suppressed. 
   * 2017-4-29:
      * The list item are working now with the mathjax plugin. The HTML tag were not encoded
      * The list items have no a left margin of 0. It was overwritten by the standard dokuwiki template
