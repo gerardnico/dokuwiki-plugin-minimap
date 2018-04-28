@@ -23,7 +23,9 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
     function getType()
     {
-        return 'substitution';
+        // The spelling is wrong but this is a correct value
+        // https://www.dokuwiki.org/devel:syntax_plugins#syntax_types
+        return 'substition';
     }
 
     // The handle function goal is to parse the matched syntax through the pattern function
