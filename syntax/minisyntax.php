@@ -153,7 +153,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                             $title .= ' (' . $pageId . ')';
                         }
 
-                        // Add the page nummer in the URL title
+                        // Add the page number in the URL title
                         $title .= ' (' . $pageNum . ')';
 
                         // Suppress the parts in the name with the regexp defines in the 'suppress' params
