@@ -9,7 +9,7 @@
 
 
 .nicon_folder_open {
-    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="250" height="195"><g fill="#ccc" transform="translate(-7.897 -268.6)"><rect rx="0" y="286.829" x="12.897" height="175" width="200" opacity=".517"/><path d="M13.23 458.808l39.687-132.291h198.437l-39.687 132.291z" fill-rule="evenodd"/><rect rx="0" y="273.6" x="39.688" height="13" width="90"/></g></svg>');
+    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="250" height="195"><g fill="rgb(204,204,204)" transform="translate(-7.897 -268.6)"><rect rx="0" y="286.829" x="12.897" height="175" width="200" opacity=".517"/><path d="M13.23 458.808l39.687-132.291h198.437l-39.687 132.291z" fill-rule="evenodd"/><rect rx="0" y="273.6" x="39.688" height="13" width="90"/></g></svg>');
     display: inline-block;
     width: 1.5em;
     height: 1em;
