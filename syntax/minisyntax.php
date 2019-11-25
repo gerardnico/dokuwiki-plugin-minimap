@@ -21,6 +21,15 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
         return 150;
     }
 
+    /**
+     * No p element please
+     * @return string
+     */
+    function getPType()
+    {
+        return 'block';
+    }
+
     function getType()
     {
         // The spelling is wrong but this is a correct value
