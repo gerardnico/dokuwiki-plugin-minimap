@@ -118,7 +118,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                     $homePageWithStartConf = $nameSpacePath . ':' . $startConf;
 
                     // Build the list of page
-                    $miniMapList = '<div class="list-group">';
+                    $miniMapList = '<ul class="list-group">';
                     $pageNum = 0;
                     //$pagesCount = count($pagesOfNamespace); // number of pages in the namespace
                     foreach ($pagesOfNamespace as $page) {
@@ -232,7 +232,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         }
 
                     }
-                    $miniMapList .= '</div>'; // End list-group
+                    $miniMapList .= '</ul>'; // End list-group
 
                     // Build the panel header
                     $miniMapPanel = '<div id="minimap__plugin"><div class="panel panel-default">';

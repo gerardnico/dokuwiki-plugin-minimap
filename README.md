@@ -62,8 +62,28 @@ A button ![The Button](https://github.com/gerardnico/dokuwiki-plugin-minimap/blo
 ### Cache
 As this plugin has a lot of chance to be used in a [sidebar](https://www.dokuwiki.org/faq:sidebar), you may want to add a `~~NOCACHE~~` [macro](https://www.dokuwiki.org/wiki:syntax#control_macros)
 
+## Support
+
+### No Home Page Found
+
+When the plugin can't find a start page, it will show in the head of the component `No Home Page Found`
+
+The start page of a namespace is:
+
+  * the last name of your namespace
+  * or the value of the [startpage configuration](https://www.dokuwiki.org/config:startpage) (by default `start`)
+
+For instance, for the namespace `wiki`, a start page would be:
+
+  * `wiki:wiki`
+  * or `wiki:start`
+
+
 
 ## Releases History
+
+  * 2020-05-22
+    * The li were not enclosed in a ul - accessibility problem
   * 2018-04-28
      * The plugin is now Bootstrap 4 compatible. The icons were suppressed. 
   * 2017-4-29:
