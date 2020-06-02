@@ -1,5 +1,7 @@
 # dokuwiki-plugin-minimap
 
+[![Build Status](https://travis-ci.com/gerardnico/dokuwiki-plugin-minimap.svg?branch=master)](https://travis-ci.com/gerardnico/dokuwiki-plugin-minimap)
+
 ## Usage
 
 The [Minimap Dokuwiki plugin](https://www.dokuwiki.org/plugin:minimap) generates a [sitemap](https://www.dokuwiki.org/index_sitemap?do=index) but only for the current [namespace](https://www.dokuwiki.org/namespaces) (ie mini-map)
