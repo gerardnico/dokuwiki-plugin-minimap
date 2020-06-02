@@ -8,12 +8,15 @@
 if (!defined('DOKU_INC')) die();
 
 
-class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
+class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
 {
+
+    const PLUGIN_NAME = 'minimap';
 
     function connectTo($aMode)
     {
-        $this->Lexer->addSpecialPattern('<minimap[^>]*>', $aMode, 'plugin_minimap_' . $this->getPluginComponent());
+        $pattern = '<' . $this->getPluginName() . '[^>]*>';
+        $this->Lexer->addSpecialPattern($pattern, $aMode, 'plugin_' . $this->getPluginName());
     }
 
     function getSort()
@@ -37,9 +40,19 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
         return 'substition';
     }
 
-    // The handle function goal is to parse the matched syntax through the pattern function
-    // and to return the result for use in the renderer
-    // This result is always cached until the page is modified.
+    /**
+     *
+     * The handle function goal is to parse the matched syntax through the pattern function
+     * and to return the result for use in the renderer
+     * This result is always cached until the page is modified.
+     * @param string $match
+     * @param int $state
+     * @param int $pos
+     * @param Doku_Handler $handler
+     * @return array|bool
+     * @see DokuWiki_Syntax_Plugin::handle()
+     *
+     */
     function handle($match, $state, $pos, Doku_Handler $handler)
     {
 
@@ -52,21 +65,27 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
                 // Parse the parameters
                 $match = utf8_substr($match, 8, -1); //9 = strlen("<minimap")
+
+                // Init
+                $parameters = array();
                 $parameters['substr'] = 1;
+                $parameters['includedirectory'] = $this->getConf('ShowDirectory');
+
 
                 // /i not case sensitive
-                $attributePattern = "\\s*(\w+)\\s*=\\s*[\'\"]?([\w\d\s-_\|\*\.\(\)\?\/\\\\]+)[\'\"]?\\s*";
+                $attributePattern = "\\s*(\w+)\\s*=\\s*[\'\"]{1}([^\`\"]*)[\'\"]{1}\\s*";
                 $result = preg_match_all('/' . $attributePattern . '/i', $match, $matches);
                 if ($result != 0) {
                     foreach ($matches[1] as $key => $parameterKey) {
                         $parameters[strtolower($parameterKey)] = $matches[2][$key];
                     }
                 }
+                // Cache the values
+                return array($state, $parameters);
 
         }
 
-        // Cache the values
-        return array($state, $parameters);
+        return false;
     }
 
 
@@ -100,12 +119,8 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
 
                     $nameSpacePath = getNS($callingId); // The complete path to the directory
                     $currentNameSpace = curNS($callingId); // The name of the container directory
-                    if ($parameters['includedirectory']){
-                        $includeDirectory = $parameters['includedirectory'];
-                    } else {
-                        $includeDirectory = false;
-                    }
-                    $pagesOfNamespace = $this->getNamespaceChildren($nameSpacePath, $sort='natural', $listdirs = $includeDirectory);
+                    $includeDirectory = $parameters['includedirectory'];
+                    $pagesOfNamespace = $this->getNamespaceChildren($nameSpacePath, $sort = 'natural', $listdirs = $includeDirectory);
 
                     // Set the two possible home page for the namespace ie:
                     //   - the name of the containing map ($homePageWithContainingMapName)
@@ -127,7 +142,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         $title = '';
 
                         // If it's a directory
-                        if ($page['type']=="d") {
+                        if ($page['type'] == "d") {
 
                             $pageId = $this->getNamespaceStartId($page['id']);
 
@@ -192,7 +207,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                         if ($page['id'] == $nameSpacePathPrefix . $currentNameSpace) {
                             // If the start page exists, the page with the same name
                             // than the namespace must be shown
-                            if (page_exists($nameSpacePathPrefix . $startConf) ) {
+                            if (page_exists($nameSpacePathPrefix . $startConf)) {
                                 $print = true;
                             } else {
                                 $print = false;
@@ -214,7 +229,7 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
                             $miniMapList .= "<li class=\"list-group-item " . $active . "\">";
 
                             // Add a glyphicon if it's a directory
-                            if ($page['type']=="d"){
+                            if ($page['type'] == "d") {
                                 $miniMapList .= "<span class=\"nicon_folder_open\" aria-hidden=\"true\"></span>&nbsp;&nbsp;";
                             }
 
@@ -315,26 +330,45 @@ class syntax_plugin_minimap_minisyntax extends DokuWiki_Syntax_Plugin
      * @param $id an id of a namespace (directory)
      * @return string the id of the home page
      */
-    function getNamespaceStartId($id){
+    function getNamespaceStartId($id)
+    {
 
         global $conf;
 
-        $id = $id.":";
+        $id = $id . ":";
 
-        if(page_exists($id.$conf['start'])){
+        if (page_exists($id . $conf['start'])) {
             // start page inside namespace
-            $homePageId = $id.$conf['start'];
-        }elseif(page_exists($id.noNS(cleanID($id)))){
+            $homePageId = $id . $conf['start'];
+        } elseif (page_exists($id . noNS(cleanID($id)))) {
             // page named like the NS inside the NS
-            $homePageId = $id.noNS(cleanID($id));
-        }elseif(page_exists($id)){
+            $homePageId = $id . noNS(cleanID($id));
+        } elseif (page_exists($id)) {
             // page like namespace exists
-            $homePageId = substr($id,0,-1);
+            $homePageId = substr($id, 0, -1);
         } else {
             // fall back to default
-            $homePageId = $id.$conf['start'];
+            $homePageId = $id . $conf['start'];
         }
         return $homePageId;
+    }
+
+    /**
+     * @param $get_called_class
+     * @return string
+     */
+    public static function getTagName($get_called_class)
+    {
+        list(/* $t */, /* $p */, $c) = explode('_', $get_called_class, 3);
+        return (isset($c) ? $c : '');
+    }
+
+    /**
+     * @return string - the tag
+     */
+    public static function getTag()
+    {
+        return self::getTagName(get_called_class());
     }
 
 
