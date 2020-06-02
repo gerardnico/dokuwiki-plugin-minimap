@@ -16,7 +16,7 @@ install:
   - sh travis.sh
 
 script:
-  - cd _test && phpunit --stderr --group plugin_webcomponent --verbose --debug
+  - cd _test && phpunit --stderr --group plugin_minimap --verbose --debug
 
 notifications:
   email:
