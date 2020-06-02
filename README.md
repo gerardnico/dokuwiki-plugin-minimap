@@ -12,7 +12,7 @@ See the mini-map plugin page on Dokuwiki [here](https://www.dokuwiki.org/plugin:
 
 ## Example
 
-See the plugin in action [here](http://gerardnico.com/wiki/dokuwiki/minimap).
+See the plugin in action [here](http://gerardnico.com/dokuwiki/minimap).
 
 ## Illustration
 
