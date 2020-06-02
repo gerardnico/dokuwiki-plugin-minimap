@@ -89,6 +89,14 @@ For instance, for the namespace `wiki`, a start page would be:
   * or `wiki:start`
 
 
+You can also solve this problem with a configuration: 
+
+  * If you don't have any home page, you can set the parameter `showHeader` to `false`
+```xml
+<minimap showHeader="false" >
+```
+  * If you have by default no homepage, you can set it globally in the configuration parameters.
+
 
 ## Releases History
   * 2020-06-02
