@@ -1,4 +1,6 @@
 <?php
 
 $meta['MiniMapShortCutKey'] = array('string');
-$meta['ShowDirectory'] = array('onoff');
+$meta['includedirectory'] = array('onoff');
+$meta['showheader'] = array('onoff');
+$meta['poweredby'] = array('string');

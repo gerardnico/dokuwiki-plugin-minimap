@@ -12,6 +12,10 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
 {
 
     const PLUGIN_NAME = 'minimap';
+    const INCLUDE_DIRECTORY_PARAMETERS = 'includedirectory';
+    const SHOW_HEADER = 'showheader';
+    const NAMESPACE = 'namespace';
+    const POWERED_BY = 'poweredby';
 
     function connectTo($aMode)
     {
@@ -69,7 +73,8 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                 // Init
                 $parameters = array();
                 $parameters['substr'] = 1;
-                $parameters['includedirectory'] = $this->getConf('ShowDirectory');
+                $parameters[self::INCLUDE_DIRECTORY_PARAMETERS] = $this->getConf(self::INCLUDE_DIRECTORY_PARAMETERS);
+                $parameters[self::SHOW_HEADER] = $this->getConf(self::SHOW_HEADER);
 
 
                 // /i not case sensitive
@@ -77,7 +82,12 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                 $result = preg_match_all('/' . $attributePattern . '/i', $match, $matches);
                 if ($result != 0) {
                     foreach ($matches[1] as $key => $parameterKey) {
-                        $parameters[strtolower($parameterKey)] = $matches[2][$key];
+                        $parameter = strtolower($parameterKey);
+                        $value = $matches[2][$key];
+                        if (in_array($parameter, [self::SHOW_HEADER, self::INCLUDE_DIRECTORY_PARAMETERS])) {
+                            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                        }
+                        $parameters[$parameter] = $value;
                     }
                 }
                 // Cache the values
@@ -118,8 +128,11 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                     }
 
                     $nameSpacePath = getNS($callingId); // The complete path to the directory
+                    if (array_key_exists(self::NAMESPACE, $parameters)) {
+                        $nameSpacePath = $parameters[self::NAMESPACE];
+                    }
                     $currentNameSpace = curNS($callingId); // The name of the container directory
-                    $includeDirectory = $parameters['includedirectory'];
+                    $includeDirectory = $parameters[self::INCLUDE_DIRECTORY_PARAMETERS];
                     $pagesOfNamespace = $this->getNamespaceChildren($nameSpacePath, $sort = 'natural', $listdirs = $includeDirectory);
 
                     // Set the two possible home page for the namespace ie:
@@ -135,6 +148,8 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                     // Build the list of page
                     $miniMapList = '<ul class="list-group">';
                     $pageNum = 0;
+                    $startPageFound = false;
+                    $homePageFound = false;
                     //$pagesCount = count($pagesOfNamespace); // number of pages in the namespace
                     foreach ($pagesOfNamespace as $page) {
 
@@ -249,37 +264,52 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                     }
                     $miniMapList .= '</ul>'; // End list-group
 
+
                     // Build the panel header
-                    $miniMapPanel = '<div id="minimap__plugin"><div class="panel panel-default">';
+                    $miniMapHeader = "";
+                    $startId = "";
                     if ($startPageFound) {
                         $startId = $homePageWithStartConf;
                     } else {
                         if ($homePageFound) {
                             $startId = $homePageWithContainingMapName;
-                        } else {
-                            $panelHeaderContent = 'No Home Page found';
                         }
                     }
-                    if (!$panelHeaderContent) {
+
+                    $panelHeaderContent = "";
+                    if ($startId == "") {
+                        if ($parameters[self::SHOW_HEADER] == true) {
+                            $panelHeaderContent = 'No Home Page found';
+                        }
+                    } else {
                         $panelHeaderContent = tpl_link(
                             wl($startId),
                             tpl_pagetitle($startId, true),
                             'title="' . $startId . '"',
                             $return = true);
+                        // We are not counting the header page
+                        $pageNum--;
                     }
 
-                    // We are not counting the header page
-                    $pageNum--;
+                    if ($panelHeaderContent != "") {
+                        $miniMapHeader .= '<div class="panel-heading">' . $panelHeaderContent . '  <span class="label label-primary">' . $pageNum . ' pages</span></div>';
+                    }
 
-                    $miniMapPanel .= '<div class="panel-heading">' . $panelHeaderContent . '  <span class="label label-primary">' . $pageNum . ' pages</span></div>';
                     if ($parameters['debug']) {
-                        $miniMapPanel .= '<div class="panel-body">' .
+                        $miniMapHeader .= '<div class="panel-body">' .
                             '<B>Debug Information:</B><BR>' .
                             'CallingId: (' . $callingId . ')<BR>' .
                             'Suppress Option: (' . $parameters['suppress'] . ')<BR>' .
                             '</div>';
                     }
-                    $renderer->doc .= $miniMapPanel . $miniMapList . '</div></div>';
+
+                    $poweredBy = '<div class="panel-footing"><a class="minimap_badge" href="https://gerardnico.com/dokuwiki/minimap">'.$this->getConf(self::POWERED_BY).'</a></div>';
+                    // Header + list
+                    $renderer->doc .= '<div id="minimap__plugin"><div class="panel panel-default">'
+                        . $miniMapHeader
+                        . $miniMapList
+                        . $poweredBy
+                        . '</div></div>';
                     break;
             }
 

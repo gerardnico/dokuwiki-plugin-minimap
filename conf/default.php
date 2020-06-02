@@ -1,4 +1,6 @@
 <?php
 
 $conf['MiniMapShortCutKey'] = 'm';
-$conf['ShowDirectory'] = false;
+$conf['includedirectory'] = false;
+$conf['showheader'] = true;
+$conf['poweredby'] = 'Powered by Minimap';
