@@ -5,9 +5,12 @@ class action_plugin_minimap extends Dokuwiki_Action_Plugin {
 
     /**
      * Register its handlers with the dokuwiki's event controller
+     * @param Doku_Event_Handler $controller
      */
     function register(Doku_Event_Handler $controller) {
+
         $controller->register_hook('TOOLBAR_DEFINE', 'AFTER',  $this, 'handle_toolbar', array());
+
     }
 
     function handle_toolbar(& $event, $param) {
@@ -23,4 +26,6 @@ class action_plugin_minimap extends Dokuwiki_Action_Plugin {
             'block' => true
         );
     }
+
+
 }

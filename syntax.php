@@ -68,7 +68,7 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
             case DOKU_LEXER_SPECIAL :
 
                 // Parse the parameters
-                $match = utf8_substr($match, 8, -1); //9 = strlen("<minimap")
+                $match = substr($match, 8, -1); //9 = strlen("<minimap")
 
                 // Init
                 $parameters = array();
