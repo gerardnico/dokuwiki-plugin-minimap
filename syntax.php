@@ -319,7 +319,40 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
 
     }
 
+    /**
+     * Return all pages and/of sub-namespaces (subdirectory) of a namespace (ie directory)
+     * Adapted from feed.php
+     *
+     * @param $namespace The container of the pages
+     * @param string $sort 'natural' to use natural order sorting (default); 'date' to sort by filemtime
+     * @param $listdirs - Add the directory to the list of files
+     * @return array An array of the pages for the namespace
+     */
+    function getNamespaceChildren($namespace, $sort = 'natural', $listdirs = false)
+    {
+        require_once(DOKU_INC . 'inc/search.php');
+        global $conf;
 
+        $ns = ':' . cleanID($namespace);
+        // ns as a path
+        $ns = utf8_encodeFN(str_replace(':', '/', $ns));
+
+        $data = array();
+
+        // Options of the callback function search_universal
+        // in the search.php file
+        $search_opts = array(
+            'depth' => 1,
+            'pagesonly' => true,
+            'listfiles' => true,
+            'listdirs' => $listdirs,
+            'firsthead' => true
+        );
+        // search_universal is a function in inc/search.php that accepts the $search_opts parameters
+        search($data, $conf['datadir'], 'search_universal', $search_opts, $ns, $lvl = 1, $sort);
+
+        return $data;
+    }
 
     /**
      * Return the id of the start page of a namespace
