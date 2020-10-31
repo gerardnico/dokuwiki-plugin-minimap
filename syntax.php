@@ -175,7 +175,12 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                             // for instance if <math></math> is used, the output must have &lgt ...
                             // otherwise browser may add quote and the math plugin will not work
                             // May be a solution was just to encode the output
-                            $title = tpl_pagetitle($pageId, true);
+
+                            // Don't use the below tpl_pagetitle procedure, it will return an OOM
+                            // PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /inc/Cache/CacheInstructions.php on line 44
+                            //$title = tpl_pagetitle($pageId, true);
+
+                            $title = p_get_first_heading($page['id']);
                         }
 
                         // Name if the variable that it's shown. A part of it can be suppressed
