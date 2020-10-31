@@ -268,7 +268,7 @@ class plugin_minimap_test extends DokuWikiTest
         idx_addPage($subpage);
 
         $minimapPage = $namespace.':'.'sidebar';
-        saveWikiText($minimapPage, '<' . syntax_plugin_minimap::PLUGIN_NAME . ' '.syntax_plugin_minimap::NAMESPACE.'="'.$subNamespace.'" />', 'Page with minimap');
+        saveWikiText($minimapPage, '<' . syntax_plugin_minimap::PLUGIN_NAME . ' '.syntax_plugin_minimap::NAMESPACE_KEY_ATT.'="'.$subNamespace.'" />', 'Page with minimap');
         idx_addPage($minimapPage);
 
         $testRequest = new TestRequest();

@@ -14,7 +14,7 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
     const PLUGIN_NAME = 'minimap';
     const INCLUDE_DIRECTORY_PARAMETERS = 'includedirectory';
     const SHOW_HEADER = 'showheader';
-    const NAMESPACE = 'namespace';
+    const NAMESPACE_KEY_ATT = 'namespace';
     const POWERED_BY = 'poweredby';
 
     function connectTo($aMode)
@@ -128,8 +128,8 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                     }
 
                     $nameSpacePath = getNS($callingId); // The complete path to the directory
-                    if (array_key_exists(self::NAMESPACE, $parameters)) {
-                        $nameSpacePath = $parameters[self::NAMESPACE];
+                    if (array_key_exists(self::NAMESPACE_KEY_ATT, $parameters)) {
+                        $nameSpacePath = $parameters[self::NAMESPACE_KEY_ATT];
                     }
                     $currentNameSpace = curNS($callingId); // The name of the container directory
                     $includeDirectory = $parameters[self::INCLUDE_DIRECTORY_PARAMETERS];
@@ -180,7 +180,7 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
                             // PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /inc/Cache/CacheInstructions.php on line 44
                             //$title = tpl_pagetitle($pageId, true);
 
-                            $title = p_get_first_heading($page['id']);
+                            $title = p_get_metadata(cleanID($page['id']),'title',METADATA_DONT_RENDER);
                         }
 
                         // Name if the variable that it's shown. A part of it can be suppressed
