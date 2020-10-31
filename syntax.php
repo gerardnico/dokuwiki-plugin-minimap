@@ -178,9 +178,9 @@ class syntax_plugin_minimap extends DokuWiki_Syntax_Plugin
 
                             // Don't use the below tpl_pagetitle procedure, it will return an OOM
                             // PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 98570240 bytes) in /inc/Cache/CacheInstructions.php on line 44
-                            //$title = tpl_pagetitle($pageId, true);
-
-                            $title = p_get_metadata(cleanID($page['id']),'title',METADATA_DONT_RENDER);
+                            // $title = tpl_pagetitle($pageId, true);
+                            // 0 = Don't render
+                            $title = p_get_metadata($pageId,'title',0);
                         }
 
                         // Name if the variable that it's shown. A part of it can be suppressed
